@@ -1,11 +1,4 @@
-# Prompt series: Robby follow-up engine (~24)
-
-Copy one prompt at a time. Do not skip unless the previous step is done and you can defend it.
-Product time budget is 3 hours. This series is 0% → a submittable take-home.
-
-They grade messy input, send guardrails, quote/message state, and README judgment — not UI,
-auth, or framework fashion. "Sending" writes to an outbox; design the interface as if a real
-SMS/email provider sits behind it.
+# Prompt series: Robby follow-up engine
 
 Seed facts:
 - `quotes.json`: 30 quotes (Q-1000–Q-1029). open | accepted | dismissed.
