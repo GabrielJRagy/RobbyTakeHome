@@ -48,7 +48,7 @@ export function readEvents(db: Db): StoredEvent[] {
   });
 }
 
-export function resolveStatus(
+function resolveStatus(
   jsonStatus: QuoteStatus,
   events: StoredEvent[],
 ): QuoteStatus {
@@ -58,7 +58,7 @@ export function resolveStatus(
   return "open";
 }
 
-export function projectQuote(quote: Quote, events: StoredEvent[]): QuoteProjection {
+function projectQuote(quote: Quote, events: StoredEvent[]): QuoteProjection {
   const mine = events.filter(
     (event) => event.quote_id === quote.id,
   );
@@ -80,7 +80,7 @@ export function projectQuote(quote: Quote, events: StoredEvent[]): QuoteProjecti
   };
 }
 
-export function projectAll(
+function projectAll(
   quotes: Quote[],
   events: StoredEvent[],
 ): Map<string, QuoteProjection> {

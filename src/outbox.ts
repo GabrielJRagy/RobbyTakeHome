@@ -102,7 +102,7 @@ export function listOutbox(db: Db): OutboxRow[] {
   return rows.map(fromOutboxRow);
 }
 
-export function getOutboxByDraft(db: Db, draftId: string): OutboxRow | undefined {
+function getOutboxByDraft(db: Db, draftId: string): OutboxRow | undefined {
   const row = db
     .prepare(`SELECT * FROM outbox WHERE idempotency_key = ?`)
     .get(draftId) as OutboxDbRow | undefined;

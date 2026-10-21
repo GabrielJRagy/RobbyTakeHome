@@ -5,10 +5,6 @@
   "type": "module",
   "scripts": {
     "test": "tsx --experimental-sqlite --test tests/**/*.test.ts",
-    "ingest": "tsx --experimental-sqlite src/app.ts ingest",
-    "policy": "tsx --experimental-sqlite src/app.ts policy",
-    "engine": "tsx --experimental-sqlite src/app.ts engine",
-    "cli": "tsx --experimental-sqlite src/app.ts",
     "start": "tsx --experimental-sqlite src/server.ts"
   },
   "devDependencies": {

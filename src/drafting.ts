@@ -69,7 +69,7 @@ export function firstName(customerName: string): string {
   return customerName.trim().split(/\s+/)[0] ?? "there";
 }
 
-export function formatAmount(amount: number): string {
+function formatAmount(amount: number): string {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",

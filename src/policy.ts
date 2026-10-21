@@ -16,9 +16,7 @@ import {
 } from "./project.ts";
 import type { Draft, OutboxRow, Quote, QuoteProjection, Signal } from "./types.ts";
 
-export type { Signal };
-
-export const SIGNAL_RANK: Record<Signal, number> = {
+const SIGNAL_RANK: Record<Signal, number> = {
   C: 0,
   A: 1,
   D: 2,
@@ -51,11 +49,11 @@ export type PolicyResult = {
   suppressed: SuppressedCandidate[];
 };
 
-export function isMessageable(projection: QuoteProjection): boolean {
+function isMessageable(projection: QuoteProjection): boolean {
   return projection.status === "open";
 }
 
-export function matchSignals(
+function matchSignals(
   quote: Quote,
   projection: QuoteProjection,
   now: Now,

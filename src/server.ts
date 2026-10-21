@@ -7,13 +7,13 @@ import { openDb, wipeDbFiles, type Db } from "./db.ts";
 import { run as runEngine } from "./engine.ts";
 import { loadSeed } from "./ingest.ts";
 import { FileProvider, listOutbox, SendError, sendDraft } from "./outbox.ts";
-import { OUTBOX_LOG_PATH, PUBLIC_DIR, WEB_DB_PATH } from "./paths.ts";
+import { DB_PATH, OUTBOX_LOG_PATH, PUBLIC_DIR } from "./paths.ts";
 import { evaluateFromDb } from "./policy.ts";
 import { readEvents, readQuotes } from "./project.ts";
 
 const PORT = Number(process.env.PORT) || 3456;
 
-let db: Db = openDb(WEB_DB_PATH);
+let db: Db = openDb(DB_PATH);
 
 function resolveDraftId(id: string, forSend = false): string {
   if (!id.startsWith("Q-")) return id;
@@ -86,9 +86,9 @@ function serveStatic(urlPath: string, res: ServerResponse): void {
 
 function resetApp(): void {
   db.close();
-  wipeDbFiles(WEB_DB_PATH);
+  wipeDbFiles(DB_PATH);
   if (existsSync(OUTBOX_LOG_PATH)) unlinkSync(OUTBOX_LOG_PATH);
-  db = openDb(WEB_DB_PATH);
+  db = openDb(DB_PATH);
 }
 
 const server = createServer(async (req, res) => {
