@@ -11,13 +11,12 @@ Commands actually run for this submission:
 ```bash
 npm install
 npm test
-npm run ingest
-npm run policy
-npm run engine
 npm start
 ```
 
-`npm start` loads the seed and prints all four screens. `npm run ingest` is rerunnable (second run inserts 0 extra events; 88 JSONL lines → 82 unique `event_id`s).
+Open **http://127.0.0.1:3456**. The page starts empty. Click **Ingest seed**, then **Run engine**. A **Restart** button appears after ingest and wipes the web database so you can retest from scratch. Theme toggle is top right.
+
+CLI is still there (`npm run cli`, `npm run ingest`, `npm run policy`, `npm run engine`). `npm run ingest` is rerunnable (88 JSONL lines → 82 unique `event_id`s).
 
 | Screen | Command |
 | --- | --- |
@@ -28,16 +27,25 @@ npm start
 
 `--now=` is the injected clock. Policy and send do not call `Date.now()`.
 
-**Not tested, and why:** CLI table layout (`src/display.ts`); SQLite itself; the append-only `outbox.jsonl` file vs the table (the table is the source of truth); a real SMS provider; HTML/auth/deploy. Those are not where double-sends or accepted-quote texts hide. Guardrail tests cover ingest duplicates, projections, cooldown, stale drafts, and provider retries instead.
+**Not tested, and why:** CLI table layout (`src/display.ts`); SQLite itself; CSS/theme chrome; a real SMS provider; auth/deploy. Guardrail tests cover ingest duplicates, projections, cooldown, stale drafts, and provider retries instead.
 
-If you already completed the demo below, `followup.db` still has Q-1012 sent. Delete `followup.db` (and `outbox.jsonl`) to start clean.
+The web UI uses `followup-web.db`. **Restart** on the page wipes it. CLI still uses `followup.db`.
 
 ## Demo script (under 3 minutes)
 
 Stable candidate: **Q-1012** (Carl Dawson, $18,000, six views). Q-1004 is accepted and must refuse.
 
+Web:
+
 ```bash
-npm install
+npm install && npm start
+```
+
+Open http://127.0.0.1:3456 → **Ingest seed** → **Run engine** → Approve/Send Q-1012 twice (second is a no-op) → **Restart** to wipe and retest.
+
+CLI:
+
+```bash
 npm run ingest
 npm run policy
 npm run engine
@@ -90,6 +98,6 @@ The seams already in this repo are the whole expansion. `POLICY_CONFIG` is alrea
 
 ## What I'd build next
 
-Honest leftovers: the surface is CLI tables, not a local HTML app; SQLite is Node’s experimental `node:sqlite`; `followup.db` is a single-shop file. Quiet hours, delivery webhooks (`delivered` / `bounced` as events), template A/B, per-tech daily send caps, a real Twilio `OutboxPort`, shop-admin config UI, and ranking by historic conversion are a day of work on the same seams — I would not start them by forking `evaluate`.
+Honest leftovers: SQLite is Node’s experimental `node:sqlite`; the UI is one local page, not shop admin. Quiet hours, delivery webhooks (`delivered` / `bounced` as events), template A/B, per-tech daily send caps, a real Twilio `OutboxPort`, and ranking by historic conversion are a day of work on the same seams — I would not start them by forking `evaluate`.
 
-Incomplete on purpose: no auth, no deploy, no 100% coverage, no tests of the table formatter or SQLite itself. If a reviewer walks the README demo after a previous send, Q-1012 is already on cooldown until `followup.db` is deleted. That is the product behaving, not a bug.
+Incomplete on purpose: no auth, no deploy, no 100% coverage, no tests of the table formatter or SQLite itself. Use **Restart** (web) or delete `followup.db` (CLI) to replay a send.

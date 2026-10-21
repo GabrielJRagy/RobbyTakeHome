@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Follow-up engine</title>
+  <style>
+    :root {
+      --bg: #f4f1ea;
+      --bg-2: #fffdf8;
+      --ink: #1c1916;
+      --muted: #6b645c;
+      --line: #d9d1c7;
+      --accent: #1f6f5b;
+      --accent-ink: #fff;
+      --danger: #9b2c2c;
+      --warn-bg: #f8ead6;
+      --ok: #1f6f5b;
+      --shadow: 0 1px 2px rgba(28, 25, 22, 0.08);
+    }
+    [data-theme="dark"] {
+      --bg: #161411;
+      --bg-2: #1e1b17;
+      --ink: #f3efe7;
+      --muted: #a39b91;
+      --line: #3a342d;
+      --accent: #3cb89a;
+      --accent-ink: #10231e;
+      --danger: #f0a0a0;
+      --warn-bg: #3a2c18;
+      --ok: #7ddcbf;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font: 14px/1.45 ui-sans-serif, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      background: var(--bg-2);
+      border-bottom: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+    header h1 { font-size: 16px; margin: 0; font-weight: 650; }
+    header .grow { flex: 1; }
+    .muted { color: var(--muted); }
+    button, input {
+      font: inherit;
+      color: var(--ink);
+    }
+    button {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 7px 11px;
+      cursor: pointer;
+    }
+    button.primary {
+      background: var(--accent);
+      color: var(--accent-ink);
+      border-color: transparent;
+    }
+    button.danger { color: var(--danger); }
+    button:disabled { opacity: 0.45; cursor: not-allowed; }
+    #theme-toggle { margin-left: auto; }
+    main { padding: 16px 20px 48px; display: grid; gap: 16px; }
+    .bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      padding: 12px;
+      background: var(--bg-2);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+    .bar label { display: flex; align-items: center; gap: 6px; color: var(--muted); }
+    input[type="text"] {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 7px 9px;
+      min-width: 220px;
+    }
+    #banner {
+      display: none;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: var(--warn-bg);
+      white-space: pre-wrap;
+    }
+    #banner.show { display: block; }
+    #banner.err { color: var(--danger); }
+    #banner.ok { color: var(--ok); }
+    section {
+      background: var(--bg-2);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    section h2 {
+      margin: 0;
+      padding: 10px 12px;
+      font-size: 13px;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 1px solid var(--line);
+    }
+    .scroll { overflow: auto; max-height: 360px; }
+    table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+    th, td {
+      text-align: left;
+      padding: 7px 10px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      white-space: nowrap;
+    }
+    td.wrap { white-space: normal; min-width: 220px; }
+    th { font-size: 12px; color: var(--muted); font-weight: 600; position: sticky; top: 0; background: var(--bg-2); }
+    .pill {
+      display: inline-block;
+      font-size: 11px;
+      padding: 1px 7px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+    }
+    .row-actions { display: flex; gap: 6px; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Follow-up engine</h1>
+    <span class="muted" id="status">Not ingested</span>
+    <div class="grow"></div>
+    <button id="restart" class="danger hidden" type="button">Restart</button>
+    <button id="theme-toggle" type="button">Dark mode</button>
+  </header>
+  <main>
+    <div class="bar">
+      <button class="primary" id="ingest" type="button">Ingest seed</button>
+      <button id="engine" type="button" disabled>Run engine</button>
+      <label>now <input id="now" type="text" value="2026-08-16T18:00:00Z" /></label>
+    </div>
+    <div id="banner"></div>
+    <section>
+      <h2>Follow-ups</h2>
+      <div class="scroll" id="followups"></div>
+    </section>
+    <section>
+      <h2>Drafts</h2>
+      <div class="scroll" id="drafts"></div>
+    </section>
+    <section>
+      <h2>Outbox</h2>
+      <div class="scroll" id="outbox"></div>
+    </section>
+    <section>
+      <h2>Quotes</h2>
+      <div class="scroll" id="quotes"></div>
+    </section>
+    <section>
+      <h2>Events</h2>
+      <div class="scroll" id="events"></div>
+    </section>
+  </main>
+  <script>
+    const themeBtn = document.getElementById("theme-toggle");
+    const restartBtn = document.getElementById("restart");
+    const ingestBtn = document.getElementById("ingest");
+    const engineBtn = document.getElementById("engine");
+    const nowInput = document.getElementById("now");
+    const banner = document.getElementById("banner");
+    const statusEl = document.getElementById("status");
+
+    function theme() {
+      return document.documentElement.getAttribute("data-theme") || "light";
+    }
+    function setTheme(next) {
+      document.documentElement.setAttribute("data-theme", next);
+      localStorage.setItem("theme", next);
+      themeBtn.textContent = next === "dark" ? "Light mode" : "Dark mode";
+    }
+    setTheme(localStorage.getItem("theme") === "dark" ? "dark" : "light");
+    themeBtn.onclick = () => setTheme(theme() === "dark" ? "light" : "dark");
+
+    function showBanner(text, kind) {
+      banner.textContent = text;
+      banner.className = "show " + kind;
+    }
+    function clearBanner() {
+      banner.className = "";
+      banner.textContent = "";
+    }
+
+    function esc(value) {
+      return String(value ?? "").replace(/[&<>"']/g, (ch) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      }[ch]));
+    }
+
+    function table(headers, rows) {
+      if (!rows.length) return '<p class="muted" style="padding:10px">None</p>';
+      return "<table><thead><tr>" + headers.map((h) => "<th>" + esc(h) + "</th>").join("") +
+        "</tr></thead><tbody>" + rows.join("") + "</tbody></table>";
+    }
+
+    async function api(path, body) {
+      const res = await fetch(path, {
+        method: body ? "POST" : "GET",
+        headers: body ? { "content-type": "application/json" } : undefined,
+        body: body ? JSON.stringify(body) : undefined,
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        const err = data.error || {};
+        throw new Error((err.code ? err.code + ": " : "") + (err.message || res.statusText));
+      }
+      return data;
+    }
+
+    function render(state) {
+      restartBtn.classList.toggle("hidden", !state.started);
+      engineBtn.disabled = !state.started;
+      ingestBtn.disabled = false;
+      statusEl.textContent = state.started
+        ? (state.ingest.quotes + " quotes · " + state.ingest.events + " events · now " + state.now)
+        : "Not ingested — load the seed to begin";
+
+      const followRows = [
+        ...state.policy.actionable.map((c) =>
+          "<tr><td>" + esc(c.quote_id) + "</td><td>" + esc(c.phone) + "</td><td>" + esc(c.amount) +
+          "</td><td><span class='pill'>actionable</span></td><td class='wrap'>" +
+          esc(c.primary + " " + c.reasons.join("+")) + "</td></tr>"
+        ),
+        ...state.policy.suppressed.map((c) =>
+          "<tr><td>" + esc(c.quote_id) + "</td><td>" + esc(c.phone) + "</td><td>" + esc(c.amount) +
+          "</td><td><span class='pill'>suppressed</span></td><td class='wrap'>" +
+          esc(c.reasons.join("+") + " / " + c.suppressedBecause.join(", ")) + "</td></tr>"
+        ),
+      ];
+      document.getElementById("followups").innerHTML = table(
+        ["quote", "phone", "amount", "state", "why"],
+        followRows,
+      );
+
+      const draftRows = state.drafts.map((d) =>
+        "<tr><td>" + esc(d.quote_id) + "</td><td>" + esc(d.status) + "</td><td>" + esc(d.phone) +
+        "</td><td class='wrap'>" + esc(d.body) + "</td><td class='row-actions'>" +
+        "<button data-act='approve' data-id='" + esc(d.id) + "'>Approve</button>" +
+        "<button data-act='send' data-id='" + esc(d.id) + "'>Send</button>" +
+        "<button data-act='reject' data-id='" + esc(d.id) + "'>Reject</button></td></tr>"
+      );
+      document.getElementById("drafts").innerHTML = table(
+        ["quote", "status", "phone", "body", ""],
+        draftRows,
+      );
+
+      const outboxRows = state.outbox.map((o) =>
+        "<tr><td>" + esc(o.status) + "</td><td>" + esc(o.to) + "</td><td>" +
+        esc((o.draft_id || "").slice(0, 8)) + "</td><td>" + esc(o.created_at) +
+        "</td><td class='wrap'>" + esc(o.body) + "</td></tr>"
+      );
+      document.getElementById("outbox").innerHTML = table(
+        ["status", "to", "draft", "at", "body"],
+        outboxRows,
+      );
+
+      const quoteRows = state.quotes.map((q) =>
+        "<tr><td>" + esc(q.id) + "</td><td>" + esc(q.customer_name) + "</td><td>" +
+        esc(q.customer_phone) + "</td><td>" + esc(q.tech_name) + "</td><td>" +
+        esc(q.amount) + "</td><td>" + esc(q.status) + "</td><td>" + esc(q.created_at) +
+        "</td><td>" + esc(q.last_contact_at) + "</td></tr>"
+      );
+      document.getElementById("quotes").innerHTML = table(
+        ["id", "customer", "phone", "tech", "amount", "status", "created", "last_contact"],
+        quoteRows,
+      );
+
+      const eventRows = state.events.map((e) =>
+        "<tr><td>" + esc(e.timestamp) + "</td><td>" + esc(e.type) + "</td><td>" +
+        esc(e.quote_id) + "</td><td>" + esc(e.event_id.slice(0, 8)) + "</td><td>" +
+        esc(e.channel) + "</td><td>" + esc(e.direction) + "</td></tr>"
+      );
+      document.getElementById("events").innerHTML = table(
+        ["timestamp", "type", "quote", "event", "channel", "direction"],
+        eventRows,
+      );
+    }
+
+    async function refresh() {
+      const state = await api("/api/state?now=" + encodeURIComponent(nowInput.value));
+      render(state);
+    }
+
+    async function act(path, extra) {
+      clearBanner();
+      try {
+        const data = await api(path, { now: nowInput.value, ...extra });
+        render(data.state);
+        if (path === "/api/reset") showBanner("App reset. Ingest the seed to start again.", "ok");
+        else if (path === "/api/ingest") showBanner("Ingested " + data.result.quotes + " quotes and " + data.result.uniqueEventIds + " unique events.", "ok");
+        else if (path === "/api/send") {
+          showBanner(data.outcome.noop ? "Send no-op (already sent)." : "Sent. One outbox row.", "ok");
+        }
+      } catch (err) {
+        showBanner("REFUSED\n" + err.message, "err");
+        await refresh().catch(() => {});
+      }
+    }
+
+    ingestBtn.onclick = () => act("/api/ingest", {});
+    engineBtn.onclick = () => act("/api/engine", {});
+    restartBtn.onclick = () => {
+      if (confirm("Wipe this demo database and start over?")) act("/api/reset", {});
+    };
+    nowInput.onchange = () => refresh().catch((err) => showBanner(err.message, "err"));
+
+    document.getElementById("drafts").addEventListener("click", (event) => {
+      const btn = event.target.closest("button[data-act]");
+      if (!btn) return;
+      const id = btn.getAttribute("data-id");
+      const actName = btn.getAttribute("data-act");
+      act("/api/" + actName, { id });
+    });
+
+    refresh().catch((err) => showBanner(err.message, "err"));
+  </script>
+</body>
+</html>

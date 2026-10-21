@@ -1,7 +1,14 @@
+import { existsSync, unlinkSync } from "node:fs";
 import { DatabaseSync } from "node:sqlite";
 import { DB_PATH } from "./paths.ts";
 
 export type Db = DatabaseSync;
+
+export function wipeDbFiles(path: string): void {
+  for (const file of [path, `${path}-wal`, `${path}-shm`]) {
+    if (existsSync(file)) unlinkSync(file);
+  }
+}
 
 export function openDb(path: string = DB_PATH): Db {
   const db = new DatabaseSync(path);

@@ -8,7 +8,8 @@
     "ingest": "tsx --experimental-sqlite src/app.ts ingest",
     "policy": "tsx --experimental-sqlite src/app.ts policy",
     "engine": "tsx --experimental-sqlite src/app.ts engine",
-    "start": "tsx --experimental-sqlite src/app.ts"
+    "cli": "tsx --experimental-sqlite src/app.ts",
+    "start": "tsx --experimental-sqlite src/server.ts"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",
