@@ -1,11 +1,18 @@
 {
-  "name": "seed",
+  "name": "follow-up-engine",
   "version": "1.0.0",
-  "main": "index.js",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tsx --experimental-sqlite --test tests/**/*.test.ts",
+    "ingest": "tsx --experimental-sqlite src/app.ts ingest",
+    "policy": "tsx --experimental-sqlite src/app.ts policy",
+    "engine": "tsx --experimental-sqlite src/app.ts engine",
+    "start": "tsx --experimental-sqlite src/app.ts"
   },
-  "author": "",
-  "license": "ISC",
-  "description": ""
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3"
+  }
 }
