@@ -169,10 +169,3 @@ another feature.
 ### 22 — Git hygiene
 Confirm `.gitignore` excludes `prompts.readme`, node_modules, SQLite files, `.env`. No
 secrets in the tree.
-
-### 23 — Conversation history
-Export the coding-agent transcript with the deliverable (assignment requires it). Use of AI
-is fine; you must be able to defend every README sentence and every policy threshold.
-
-### 24 — Submit
-Final commands: test, ingest, policy, run. Stop.
