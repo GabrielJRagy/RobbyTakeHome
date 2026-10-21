@@ -1,0 +1,154 @@
+{
+  "now": "2026-08-16T18:00:00Z",
+  "actionable": [
+    {
+      "quote_id": "Q-1016",
+      "phone": "+19175552016",
+      "amount": 12500,
+      "reasons": [
+        "C",
+        "B"
+      ],
+      "primary": "C",
+      "last_viewed_at": "2026-08-09T05:00:00Z",
+      "suppressed": false
+    },
+    {
+      "quote_id": "Q-1007",
+      "phone": "+19175552007",
+      "amount": 5200,
+      "reasons": [
+        "C"
+      ],
+      "primary": "C",
+      "last_viewed_at": "2026-08-11T13:00:00Z",
+      "suppressed": false
+    },
+    {
+      "quote_id": "Q-1015",
+      "phone": "+19175552015",
+      "amount": 3800,
+      "reasons": [
+        "C"
+      ],
+      "primary": "C",
+      "last_viewed_at": "2026-08-10T17:00:00Z",
+      "suppressed": false
+    },
+    {
+      "quote_id": "Q-1026",
+      "phone": "+19175552026",
+      "amount": 22000,
+      "reasons": [
+        "A",
+        "B"
+      ],
+      "primary": "A",
+      "last_viewed_at": "2026-08-16T16:00:00Z",
+      "suppressed": false
+    },
+    {
+      "quote_id": "Q-1023",
+      "phone": "+19175552023",
+      "amount": 18000,
+      "reasons": [
+        "A",
+        "B"
+      ],
+      "primary": "A",
+      "last_viewed_at": "2026-08-15T08:00:00Z",
+      "suppressed": false
+    },
+    {
+      "quote_id": "Q-1000",
+      "phone": "+19175552000",
+      "amount": 850,
+      "reasons": [
+        "A",
+        "D"
+      ],
+      "primary": "A",
+      "last_viewed_at": "2026-08-15T21:00:00Z",
+      "suppressed": false
+    },
+    {
+      "quote_id": "Q-1012",
+      "phone": "+19175552012",
+      "amount": 18000,
+      "reasons": [
+        "D",
+        "B"
+      ],
+      "primary": "D",
+      "last_viewed_at": "2026-08-13T18:15:00Z",
+      "suppressed": false
+    },
+    {
+      "quote_id": "Q-1008",
+      "phone": "+19175552008",
+      "amount": 5200,
+      "reasons": [
+        "D"
+      ],
+      "primary": "D",
+      "last_viewed_at": "2026-08-12T02:00:00Z",
+      "suppressed": false
+    },
+    {
+      "quote_id": "Q-1021",
+      "phone": "+19175552021",
+      "amount": 22000,
+      "reasons": [
+        "B"
+      ],
+      "primary": "B",
+      "last_viewed_at": null,
+      "suppressed": false
+    },
+    {
+      "quote_id": "Q-1027",
+      "phone": "+19175552027",
+      "amount": 18000,
+      "reasons": [
+        "B"
+      ],
+      "primary": "B",
+      "last_viewed_at": "2026-08-07T08:00:00Z",
+      "suppressed": false
+    },
+    {
+      "quote_id": "Q-1020",
+      "phone": "+19175552020",
+      "amount": 18000,
+      "reasons": [
+        "B"
+      ],
+      "primary": "B",
+      "last_viewed_at": null,
+      "suppressed": false
+    },
+    {
+      "quote_id": "Q-1022",
+      "phone": "+19175552022",
+      "amount": 12500,
+      "reasons": [
+        "B"
+      ],
+      "primary": "B",
+      "last_viewed_at": "2026-08-08T09:00:00Z",
+      "suppressed": false
+    },
+    {
+      "quote_id": "Q-1010",
+      "phone": "+19175552010",
+      "amount": 12500,
+      "reasons": [
+        "B"
+      ],
+      "primary": "B",
+      "last_viewed_at": null,
+      "suppressed": false
+    }
+  ],
+  "suppressed": []
+}

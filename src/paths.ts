@@ -9,3 +9,4 @@ export const REPO_ROOT = join(SRC_DIR, "..");
 export const QUOTES_PATH = join(REPO_ROOT, "quotes.json");
 export const EVENTS_PATH = join(REPO_ROOT, "events.jsonl");
 export const DB_PATH = join(REPO_ROOT, "followup.db");
+export const OUTBOX_LOG_PATH = join(REPO_ROOT, "outbox.jsonl");

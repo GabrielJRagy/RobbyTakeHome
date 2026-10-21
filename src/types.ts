@@ -18,6 +18,8 @@ export type Quote = {
 };
 
 export type Channel = "sms" | "email";
+
+export type Signal = "C" | "A" | "D" | "B";
 export type Direction = "inbound" | "outbound";
 
 export type EventType =
@@ -75,6 +77,21 @@ export type StoredEvent = {
 };
 
 /**
+ * Activity derived from the full event set (timestamps, not insert order).
+ * `last_outbound_at` is follow-up `message_sent` only; `quote_sent` is `first_sent_at`.
+ */
+export type QuoteProjection = {
+  quote_id: string;
+  status: QuoteStatus;
+  first_sent_at: string | null;
+  last_viewed_at: string | null;
+  view_count: number;
+  last_customer_reply_at: string | null;
+  last_outbound_at: string | null;
+  last_accepted_at: string | null;
+};
+
+/**
  * Draft machine:
  *   drafted → approved | rejected
  *   approved → drafted (on edit) | sent | failed
@@ -113,6 +130,7 @@ export type OutboxRow = {
   to: string;
   channel: Channel;
   body: string;
+  created_at?: string;
   provider_message_id?: string;
   error?: string;
 };

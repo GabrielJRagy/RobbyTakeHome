@@ -33,5 +33,29 @@ export function ensureSchema(db: Db): void {
       direction TEXT,
       ingested_at TEXT NOT NULL
     );
+
+    CREATE TABLE IF NOT EXISTS drafts (
+      id TEXT PRIMARY KEY,
+      quote_id TEXT NOT NULL,
+      phone TEXT NOT NULL,
+      body TEXT NOT NULL,
+      channel TEXT NOT NULL,
+      reasons TEXT NOT NULL,
+      created_at TEXT NOT NULL,
+      status TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS outbox (
+      id TEXT PRIMARY KEY,
+      draft_id TEXT NOT NULL,
+      idempotency_key TEXT NOT NULL UNIQUE,
+      status TEXT NOT NULL,
+      to_phone TEXT NOT NULL,
+      channel TEXT NOT NULL,
+      body TEXT NOT NULL,
+      created_at TEXT NOT NULL,
+      provider_message_id TEXT,
+      error TEXT
+    );
   `);
 }
